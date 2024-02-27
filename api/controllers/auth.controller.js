@@ -2,11 +2,13 @@ import User from '../models/user.model.js';
 import bcryptjs from 'bcryptjs';
 import { errorHandler } from '../utils/error.js';
 import jwt from 'jsonwebtoken';
+import { v4 as uuidv4 } from 'uuid';
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
   const hashedPassword = bcryptjs.hashSync(password, 10);
-  const newUser = new User({ username, email, password: hashedPassword });
+  let uid=uuidv4();
+  const newUser = new User({ username, email, password: hashedPassword,uuid:uid,complaints:[]});
   try {
     await newUser.save();
     res.status(201).json({ message: 'User created successfully' });
@@ -37,6 +39,7 @@ export const signin = async (req, res, next) => {
 export const google = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
+    let uid=uuidv4();
     if (user) {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password: hashedPassword, ...rest } = user._doc;
@@ -57,6 +60,8 @@ export const google = async (req, res, next) => {
         username:
           req.body.name.split(' ').join('').toLowerCase() +
           Math.random().toString(36).slice(-8),
+          uuid:uid,
+          complaints:[],
         email: req.body.email,
         password: hashedPassword,
         profilePicture: req.body.photo,

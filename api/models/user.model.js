@@ -7,6 +7,14 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    uuid:{
+      type:String,
+      required:true,
+  },
+  previous_complaints:[{
+      type:String,
+      required:true,
+  }],
     email: {
       type: String,
       required: true,
