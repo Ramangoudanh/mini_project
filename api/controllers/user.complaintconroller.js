@@ -2,6 +2,7 @@ import Complaint from '../models/user.complaintmodel.js';
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
+import contactEmail from '../nodemailersetup.js';
 export const addComplaint=async(req,res)=>{
     const {uuid,complaint,complaint_proof,issue_category}=req.body;
     try{
@@ -20,7 +21,24 @@ export const addComplaint=async(req,res)=>{
     mycomplaint.issue_category=issue_category;
     mycomplaint.complaint_id=complaint_id;
     await mycomplaint.save();
+    //send the email now
+    const mail = {
+        from: "ComplaintBox",
+        to: "msanjay1907@gmail.com",
+        subject: `Complaint Reagarding ${issue_category}`,
+        html: `
+            <p>Complaint: ${complaint}</p>
+            <p>Proof:${complaint_proof}</p>
+            `,
+    };
+  await contactEmail.sendMail(mail, (error) => {
+    if (error) {
+      res.json(error);
+    } else {
     res.status(201).json({"message":non_hashed_complaint_id})
+    }
+  });
+    
     }catch(e){
         console.log(e);
         res.status(400).json({"message":"something went wrong"})
