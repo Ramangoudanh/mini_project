@@ -54,10 +54,12 @@ export const getMyComplaints= async(req,res)=>{
     for(let i =0;i<complaints.length;i++){
         for(let j=0;j<complaint.length;j++){
             let result=await bcrypt.compare(complaints[i],complaint[j].complaint_id);
+            
             if(result){
-                newlist.push(complaints[j]);
+                newlist.push(complaint[j]);
             }
         }
     }
+    console.log(newlist)
     res.status(201).json({"the complaint list of a user":newlist})
 }
