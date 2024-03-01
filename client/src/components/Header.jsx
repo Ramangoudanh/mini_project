@@ -12,10 +12,18 @@ export default function Header() {
         </Link>
         <ul className='flex gap-4 text-white'>
         <Link to='/complaints'>
-          <li>Add Complaint</li>
-        </Link>
+        {currentUser ? (
+          <li>Add Complaint</li>) : (
+            <li className='hidden'>Sign In</li>
+          )}</Link>
+        <Link to='/profile'/>
+          
+        
         <Link to='/my-complaints'>
-          <li>MyComplaints</li>
+        {currentUser ? (
+          <li>MyComplaints</li>): (
+            <li className='hidden'>Sign In</li>
+          )}
         </Link>
         
           <Link to='/'>
