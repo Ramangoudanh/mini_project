@@ -42,26 +42,28 @@ export default function MyComplaints() {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div>
-      <h2>Complaint List</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Complaint</th>
-            <th>Complaint Proof</th>
-            <th>Issue Category</th>
-          </tr>
-        </thead>
-        <tbody>
-          {complaintList && complaintList.map((complaints, index) => (
-            <tr key={index}>
-              <td>{complaints.complaint}</td>
-              <td><a href={complaints && complaints.complaint_proof} target="_blank" rel="noopener noreferrer">Proof</a></td>
-              <td>{complaints && complaints.issue_category}</td>
+    <div className="container mx-auto py-8">
+      <h2 className="text-2xl font-bold mb-4">Complaint List</h2>
+      <div className="overflow-x-auto">
+        <table className="table-auto w-full">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="px-4 py-2">Complaint</th>
+              <th className="px-4 py-2">Complaint Proof</th>
+              <th className="px-4 py-2">Issue Category</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {complaintList && complaintList.map((complaint, index) => (
+              <tr key={index} className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}>
+                <td className="border px-4 py-2">{complaint.complaint}</td>
+                <td className="border px-4 py-2"><a href={complaint.complaint_proof} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">{complaint.complaint_proof}</a></td>
+                <td className="border px-4 py-2">{complaint.issue_category}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

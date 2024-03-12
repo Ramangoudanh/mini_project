@@ -8,14 +8,22 @@ export default function Header() {
       <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
         
         <Link to='/'>
-          <h1 className='font-bold text-slate-100'>Auth App</h1>
+          <h1 className='font-bold text-slate-100'>Complaint App</h1>
         </Link>
         <ul className='flex gap-4 text-white'>
         <Link to='/complaints'>
-          <li>Add Complaint</li>
-        </Link>
+        {currentUser ? (
+          <li>Add Complaint</li>) : (
+            <li className='hidden'>Sign In</li>
+          )}</Link>
+        <Link to='/profile'/>
+          
+        
         <Link to='/my-complaints'>
-          <li>MyComplaints</li>
+        {currentUser ? (
+          <li>MyComplaints</li>): (
+            <li className='hidden'>Sign In</li>
+          )}
         </Link>
         
           <Link to='/'>
