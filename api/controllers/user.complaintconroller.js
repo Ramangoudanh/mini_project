@@ -46,7 +46,7 @@ export const addComplaint=async(req,res)=>{
         to: "msanjay1907@gmail.com",
         subject: `Complaint Reagarding ${issue_category}`,
         html: `
-            <p>Complaint: ${complaint}</p>
+            <p>Complaint: ${complaint_to_be_added}</p>
             <p>Proof:${complaint_proof}</p>
             `,
     };
