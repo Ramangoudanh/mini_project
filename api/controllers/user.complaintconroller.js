@@ -3,6 +3,7 @@ import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import contactEmail from '../nodemailersetup.js';
+import axios from 'axios';
 export const addComplaint=async(req,res)=>{
     const {uuid,complaint,complaint_proof,issue_category}=req.body;
     try{
@@ -16,7 +17,25 @@ export const addComplaint=async(req,res)=>{
     user.previous_complaints.push(non_hashed_complaint_id);
     await user.save();
    // mycomplaint.uuid=uuid;
-    mycomplaint.complaint=complaint;
+    let complaint_to_be_added=complaint;
+    if(complaint.length>100){
+        try {
+            let response = await axios.post('http://127.0.0.1:5000/getSummary', {
+                message: complaint
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            let data = response.data;
+         //   complaint = data.summary;
+            complaint_to_be_added=data.summary;
+        } catch (e) {
+            console.log("Error:", e);
+        }
+    }
+    mycomplaint.complaint=complaint_to_be_added;
     mycomplaint.complaint_proof=complaint_proof;
     mycomplaint.issue_category=issue_category;
     mycomplaint.complaint_id=complaint_id;
@@ -27,7 +46,7 @@ export const addComplaint=async(req,res)=>{
         to: "msanjay1907@gmail.com",
         subject: `Complaint Reagarding ${issue_category}`,
         html: `
-            <p>Complaint: ${complaint}</p>
+            <p>Complaint: ${complaint_to_be_added}</p>
             <p>Proof:${complaint_proof}</p>
             `,
     };
