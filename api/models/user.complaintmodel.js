@@ -19,6 +19,11 @@ complaint_id:{
     type:String,
     required:true,
     unique:true
+},
+status:{
+    type:String,
+    required:true,
+    default:"Complaint Registered"
 }
 })
 const Complaint=mongoose.model("Complaint",ComplaintSchema);
