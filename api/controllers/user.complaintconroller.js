@@ -75,7 +75,8 @@ export const getMyComplaints= async(req,res)=>{
             let result=await bcrypt.compare(complaints[i],complaint[j].complaint_id);
             
             if(result){
-                newlist.push(complaint[j]);
+                let comp={'complaint_id':complaints[i],'complaint':complaint[j].complaint,'complaint_proof':complaint[j].complaint_proof,'issue_category':complaint[j].issue_category,'status':complaint[j].status}
+                newlist.push(comp);
             }
         }
     }
