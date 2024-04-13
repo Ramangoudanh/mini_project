@@ -83,3 +83,13 @@ export const getMyComplaints= async(req,res)=>{
     console.log(newlist)
     res.status(201).json({"the complaint list of a user":newlist})
 }
+
+export const getAllComplaints = async (req, res) => {
+    try {
+        const allComplaints = await Complaint.find({});
+        res.status(200).json({ complaints: allComplaints });
+    } catch (error) {
+        console.error('Error fetching complaints:', error);
+        res.status(500).json({ error: 'An error occurred while fetching complaints' });
+    }
+};
