@@ -86,6 +86,7 @@ export const getMyComplaints= async(req,res)=>{
 
 export const getAllComplaints = async (req, res) => {
     try {
+        //Working fine
         const allComplaints = await Complaint.find({});
         res.status(200).json({ complaints: allComplaints });
     } catch (error) {

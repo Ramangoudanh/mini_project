@@ -11,7 +11,7 @@ export default function Home() {
 
   const fetchData = async () => {
       try {
-          const response = await fetch('/api/complaint/allcomplaints');
+          const response = await fetch('/api/complaint/getAllComplaints');
           console.log(response);
           setComplaintsData(response.complaints.allComplaints);
       } catch (error) {
