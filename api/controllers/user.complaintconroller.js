@@ -84,11 +84,35 @@ export const getMyComplaints= async(req,res)=>{
     res.status(201).json({"the complaint list of a user":newlist})
 }
 
+export const getComplaints = async (req, res) => {
+    try {
+        const allComplaints = await Complaint.find({});
+       console.log(allComplaints);
+        res.status(200).json(allComplaints);
+    } catch (error) {
+        console.error('Error fetching complaints:', error);
+        res.status(500).json({ error: 'An error occurred while fetching complaints' });
+    }
+};
+
+
 export const getAllComplaints = async (req, res) => {
     try {
-        //Working fine
+        // Fetch all complaints
         const allComplaints = await Complaint.find({});
-        res.status(200).json({ complaints: allComplaints });
+
+        // Count the number of complaints per issue category
+        const counts = {};
+        allComplaints.forEach(complaint => {
+            counts[complaint.issue_category] = (counts[complaint.issue_category] || 0) + 1;
+        });
+
+        // Extract labels and data for the pie chart
+        const labels = Object.keys(counts);
+        const data = Object.values(counts);
+
+        // Send the data back to the client
+        res.status(200).json({ labels, data });
     } catch (error) {
         console.error('Error fetching complaints:', error);
         res.status(500).json({ error: 'An error occurred while fetching complaints' });

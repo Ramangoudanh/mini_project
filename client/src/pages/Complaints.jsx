@@ -7,6 +7,7 @@ import {
     uploadBytesResumable,
   } from 'firebase/storage';
   import { app } from '../firebase';
+  import ComplaintsPieChart from '../components/Chart';
 export default function EmailForm() {
 
   const [senderEmail, setSenderEmail] = useState('');
@@ -22,6 +23,7 @@ export default function EmailForm() {
     if (image) {
       handleFileUpload(image);
     }
+    console.log(currentUser)
   }, [image]);
   const handleFileUpload = async (image) => {
     const storage = getStorage(app);
@@ -47,6 +49,7 @@ export default function EmailForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Here you can handle form submission, for example, sending the data to an API
+    
     const formData = {
      uuid: currentUser.uuid,
       senderEmail,
@@ -83,8 +86,19 @@ export default function EmailForm() {
     });
   };
 
-  return (
-    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+ 
+
+const isAdmin = currentUser.username === 'ramangoudanh'; 
+
+return (
+  <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+    {isAdmin ? (
+      <div>
+        <h2 className="text-2xl font-semibold mb-4">Complaints Pie Chart</h2>
+        <ComplaintsPieChart />
+      </div>
+    ) : (
+      <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold mb-4">Compose Email</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
@@ -149,6 +163,9 @@ export default function EmailForm() {
         <br/>
         <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Send Email</button>
       </form>
+      
     </div>
-  );
+    )}
+  </div>
+);
 }

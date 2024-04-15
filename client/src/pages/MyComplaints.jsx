@@ -6,27 +6,42 @@ export default function MyComplaints() {
   const [error, setError] = useState(null);
   const [complaintList, setComplaintList] = useState([]);
   const { currentUser } = useSelector((state) => state.user);
-
+  const isAdmin = currentUser.username === 'ramangoudanh';  
   useEffect(() => {
     const fetchData = async () => {
       if (!currentUser) return;
-
+    
       try {
-        const response = await fetch('/api/complaint/getMyComplaints', {
+        let endpoint = '/api/complaint/getMyComplaints';
+        let requestOptions = {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ uuid: currentUser.uuid }),
-        });
-         console.log(response.body)
+        };
+    
+        // Check if current user is an admin
+        if (isAdmin) {
+          endpoint = '/api/complaint/getComplaints';
+          requestOptions = { method: 'GET' }; // No need to send user ID for admin
+        }
+    
+        const response = await fetch(endpoint, requestOptions);
+    
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
-
+    
         const data = await response.json();
-        setComplaintList(data['the complaint list of a user']);
-        console.log(data['the complaint list of a user'])
+        
+        // If admin, set all complaints, else set user's complaints
+        if (isAdmin) {
+          setComplaintList(data);
+        } else {
+          setComplaintList(data['the complaint list of a user']);
+        }
+    
         setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -34,6 +49,7 @@ export default function MyComplaints() {
         setLoading(false);
       }
     };
+    
 
     fetchData();
   }, [currentUser]);
