@@ -1,53 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { PieChart } from '@mui/x-charts';
+import React from 'react';
 
 export default function Home() {
-    const [complaintsData, setComplaintsData] = useState([]);
-
-    useEffect(() => {
-      // Fetch complaints data from your API
-      const fetchData = async () => {
-        try {
-          const response = await axios.get('/api/complaints/getAllComplaints'); // Assuming your API endpoint is '/api/complaints'
-          setComplaintsData(response.data.complaints);
-        } catch (error) {
-          console.error('Error fetching complaints:', error);
-        }
-      };
+  return (
+    <div className='px-4 py-12 max-w-2xl mx-auto'>
+      <h1 className='text-3xl font-bold  mb-4 text-slate-800'>
+        Welcome to my complaint App!
+      </h1>
+      <p className='mb-4 text-slate-700'>
+        This is a full-stack web application built with the MERN (MongoDB,
+        Express, React, Node.js) stack. It includes authentication features that
+        allow users to sign up, log in, and log out, and provides access to
+        protected routes only for authenticated users.
+      </p>
+      <p className='mb-4 text-slate-700'>
+        The front-end of the application is built with React and uses React
+        Router for client-side routing. The back-end is built with Node.js and
+        Express, and uses MongoDB as the database. Authentication is implemented
+        using JSON Web Tokens (JWT).
+      </p>
   
-      fetchData();
-    }, []); // Fetch data only once when the component mounts
-  
-    // Process data to prepare for pie chart
-    const prepareDataForPieChart = () => {
-      // Count occurrences of each issue category
-      const categoryCounts = complaintsData.reduce((counts, complaint) => {
-        counts[complaint.issue_category] = (counts[complaint.issue_category] || 0) + 1;
-        return counts;
-      }, {});
-  
-      // Convert counts object to array of objects
-      const pieChartData = Object.keys(categoryCounts).map(category => ({
-        category,
-        value: categoryCounts[category],
-      }));
-  
-      return pieChartData;
-    };
-  
-    return (
-      <div>
-        <h2>Complaints by Category</h2>
-        <PieChart
-          data={prepareDataForPieChart()}
-          innerRadius={0.5} // Adjust as needed
-          outerRadius={0.8} // Adjust as needed
-          seriesField="category"
-          angleField="value"
-          label={{ type: 'inner', offset: '-50%' }} // Adjust label position
-          legend={{ position: 'bottom' }} // Adjust legend position
-        />
-      </div>
-    );
+    </div>
+  );
 }

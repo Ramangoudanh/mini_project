@@ -5,5 +5,5 @@ const router = express.Router();
 router.post('/addcomplaint', addComplaint);
 router.post('/getmycomplaints', getMyComplaints);
 router.get('/getAllComplaints',getAllComplaints);
-router.get('/getComplaints',getMyComplaints);
+router.get('/getComplaints',getComplaints);
 export default router;

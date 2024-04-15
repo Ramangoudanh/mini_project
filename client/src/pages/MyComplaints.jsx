@@ -12,30 +12,26 @@ export default function MyComplaints() {
       if (!currentUser) return;
     
       try {
-        let endpoint = '/api/complaint/getMyComplaints';
-        let requestOptions = {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ uuid: currentUser.uuid }),
-        };
-    
-        // Check if current user is an admin
+        let response;
         if (isAdmin) {
-          endpoint = '/api/complaint/getComplaints';
-          requestOptions = { method: 'GET' }; // No need to send user ID for admin
+          response = await fetch('/api/complaint/getComplaints');
+        } else {
+          response = await fetch('/api/complaint/getMyComplaints', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ uuid: currentUser.uuid }),
+          });
         }
-    
-        const response = await fetch(endpoint, requestOptions);
     
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
     
         const data = await response.json();
-        
-        // If admin, set all complaints, else set user's complaints
+    
+        // Set complaints based on the response data
         if (isAdmin) {
           setComplaintList(data);
         } else {
@@ -49,6 +45,7 @@ export default function MyComplaints() {
         setLoading(false);
       }
     };
+    
     
 
     fetchData();
