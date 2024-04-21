@@ -13,3 +13,4 @@ export default defineConfig({
   },
   plugins: [react()],
 });
+//http://localhost:3000
