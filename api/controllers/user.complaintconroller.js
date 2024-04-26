@@ -39,6 +39,8 @@ export const addComplaint=async(req,res)=>{
     mycomplaint.complaint_proof=complaint_proof;
     mycomplaint.issue_category=issue_category;
     mycomplaint.complaint_id=complaint_id;
+    mycomplaint.title=title;
+
     await mycomplaint.save();
     //send the email now
     const mail = {
@@ -75,7 +77,7 @@ export const getMyComplaints= async(req,res)=>{
             let result=await bcrypt.compare(complaints[i],complaint[j].complaint_id);
             
             if(result){
-                let comp={'complaint_id':complaints[i],'complaint':complaint[j].complaint,'complaint_proof':complaint[j].complaint_proof,'issue_category':complaint[j].issue_category,'status':complaint[j].status}
+                let comp={'complaint_id':complaints[i],'complaint':complaint[j].complaint,'title':complaint[j].title,'complaint_proof':complaint[j].complaint_proof,'issue_category':complaint[j].issue_category,'status':complaint[j].status}
                 newlist.push(comp);
             }
         }
@@ -94,6 +96,17 @@ export const getComplaints = async (req, res) => {
         res.status(500).json({ error: 'An error occurred while fetching complaints' });
     }
 };
+function generateColors(count) {
+    const colors = [];
+    const hueIncrement = 360 / count;
+    let hue = 0;
+    for (let i = 0; i < count; i++) {
+        const color = `hsl(${hue}, 70%, 50%)`;
+        colors.push(color);
+        hue += hueIncrement;
+    }
+    return colors;
+}
 
 
 export const getAllComplaints = async (req, res) => {
@@ -107,14 +120,113 @@ export const getAllComplaints = async (req, res) => {
             counts[complaint.issue_category] = (counts[complaint.issue_category] || 0) + 1;
         });
 
-        // Extract labels and data for the pie chart
-        const labels = Object.keys(counts);
-        const data = Object.values(counts);
+        // Generate different colors for each category
+        const colors = generateColors(Object.keys(counts).length);
+
+        // Convert counts object into array of objects
+        const responseData = Object.keys(counts).map((key, index) => ({
+            id: key, // Use label as id
+            label: key,
+            value: counts[key],
+            color: colors[index], // Assign color
+        }));
 
         // Send the data back to the client
-        res.status(200).json({ labels, data });
+        res.status(200).json(responseData);
     } catch (error) {
         console.error('Error fetching complaints:', error);
         res.status(500).json({ error: 'An error occurred while fetching complaints' });
     }
 };
+
+
+export const updateComplaintStatus = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        // Find the complaint by ID
+        const complaint = await Complaint.findById(id);
+        if (!complaint) {
+            return res.status(404).json({ error: 'Complaint not found' });
+        }
+
+        // Update the status
+        complaint.status = status;
+        complaint.title = complaint.title;
+        await complaint.save();
+
+        // Send the updated complaint back to the client
+        res.status(200).json({ message: 'Complaint status updated successfully', complaint });
+    } catch (error) {
+        console.error('Error updating complaint status:', error);
+        res.status(500).json({ error: 'An error occurred while updating complaint status' });
+    }
+};
+
+export const getComplaintCategories = async (req, res) => {
+    try {
+      // Fetch distinct categories
+      const categories = await Complaint.distinct('issue_category');
+    
+      // Initialize an array to store aggregated data
+      const data = [];
+  
+      // Iterate over each category
+      for (const category of categories) {
+        // Fetch complaints for the current category
+        const complaints = await Complaint.find({ issue_category: category });
+        // Count resolved, pending, and closed complaints for the current category
+        let resolved = 0;
+        let pending = 0;
+        let closed = 0;
+        for (const complaint of complaints) {
+          if (complaint.status === 'Resolved') {
+            resolved++;
+          } else if (complaint.status === 'Pending') {
+            pending++;
+          } else if (complaint.status === 'Closed') {
+            closed++;
+          }
+        }
+  
+        // Generate random colors for demonstration purposes
+        const resolveColor = getRandomColor();
+        const pendingColor = getRandomColor();
+        const closedColor = getRandomColor();
+  
+        // Add the aggregated data to the result array
+        data.push({
+          _id: category,
+          resolved,
+          pending,
+          closed,
+          resolveColor,
+          pendingColor,
+          closedColor,
+        });
+      }
+  
+      // Send the aggregated data back to the client
+      res.status(200).json(data);
+    } catch (error) {
+      console.error('Error fetching complaint categories:', error);
+      res.status(500).json({ error: 'An error occurred while fetching complaint categories' });
+    }
+  };
+  
+  // Function to generate a random color
+  const getRandomColor = () => {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
+  
+  
+  
+  
+
+  

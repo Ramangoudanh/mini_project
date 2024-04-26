@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-
-import { PieChart } from '@mui/x-charts';
-
+import { ResponsivePie } from "@nivo/pie";
+//import { PieChart } from '@mui/x-charts';
+import { tokens } from "../theme";
+import { useTheme } from "@mui/material";
 const ComplaintsPieChart = () => {
-    const [chartData, setChartData] = useState({ labels: [], data: [] });
+    const [chartData, setChartData] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('https://mini-project-fo4m.onrender.com/api/complaint/getAllComplaints'); // Assuming your API endpoint is '/api/complaints'
+                const response = await fetch('http://localhost:3000/api/complaint/getAllComplaints'); // Assuming your API endpoint is '/api/complaints'
                 const data = await response.json();
+                console.log(data);
                 setChartData(data);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -18,26 +20,106 @@ const ComplaintsPieChart = () => {
 
         fetchData();
     }, []);
-    return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', gap: '20px' }}>
-            <h2>Complaints Pie Chart</h2>
-            <div style={{ width: '400px', height: '200px' }}>
-                <PieChart
-                    series={[
-                        {
-                            data: chartData.labels.map((label, index) => ({
-                                id: index,
-                                value: chartData.data[index],
-                                label: label
-                            }))
-                        }
-                    ]}
-                    width={400}
-                    height={200}
-                />
-            </div>
-        </div>
-    );
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
+    return(
+        <ResponsivePie
+          data={chartData}
+          theme={{
+            axis: {
+              domain: {
+                line: {
+                  stroke: colors.grey[100],
+                },
+              },
+              legend: {
+                text: {
+                  fill: colors.grey[100],
+                },
+              },
+              ticks: {
+                line: {
+                  stroke: colors.grey[100],
+                  strokeWidth: 1,
+                },
+                text: {
+                  fill: colors.grey[100],
+                },
+              },
+            },
+            legends: {
+              text: {
+                fill: colors.grey[100],
+              },
+            },
+          }}
+          margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+          innerRadius={0.5}
+          padAngle={0.7}
+          cornerRadius={3}
+          activeOuterRadiusOffset={8}
+          borderColor={{
+            from: "color",
+            modifiers: [["darker", 0.2]],
+          }}
+          arcLinkLabelsSkipAngle={10}
+          arcLinkLabelsTextColor={colors.grey[100]}
+          arcLinkLabelsThickness={2}
+          arcLinkLabelsColor={{ from: "color" }}
+          enableArcLabels={false}
+          arcLabelsRadiusOffset={0.4}
+          arcLabelsSkipAngle={7}
+          arcLabelsTextColor={{
+            from: "color",
+            modifiers: [["darker", 2]],
+          }}
+          defs={[
+            {
+              id: "dots",
+              type: "patternDots",
+              background: "inherit",
+              color: "rgba(255, 255, 255, 0.3)",
+              size: 4,
+              padding: 1,
+              stagger: true,
+            },
+            {
+              id: "lines",
+              type: "patternLines",
+              background: "inherit",
+              color: "rgba(255, 255, 255, 0.3)",
+              rotation: -45,
+              lineWidth: 6,
+              spacing: 10,
+            },
+          ]}
+          legends={[
+            {
+              anchor: "bottom",
+              direction: "row",
+              justify: false,
+              translateX: 0,
+              translateY: 56,
+              itemsSpacing: 0,
+              itemWidth: 100,
+              itemHeight: 18,
+              itemTextColor: "#999",
+              itemDirection: "left-to-right",
+              itemOpacity: 1,
+              symbolSize: 18,
+              symbolShape: "circle",
+              effects: [
+                {
+                  on: "hover",
+                  style: {
+                    itemTextColor: "#000",
+                  },
+                },
+              ],
+            },
+          ]}
+        />
+      );
     
     
 };

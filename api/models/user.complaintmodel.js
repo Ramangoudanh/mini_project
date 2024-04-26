@@ -4,6 +4,10 @@ const ComplaintSchema=mongoose.Schema({
 //     type:String,
 //     required:true,
 // },
+title: {
+    type: String,
+    //required: true,
+},
 complaint:{
     type:String,
     required:true,
