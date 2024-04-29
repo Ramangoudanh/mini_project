@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import contactEmail from '../nodemailersetup.js';
 import axios from 'axios';
 export const addComplaint=async(req,res)=>{
-    const {uuid,complaint,complaint_proof,issue_category}=req.body;
+    const {uuid,complaint,complaint_proof,issue_category,title}=req.body;
     try{
     let mycomplaint=Complaint()
     let user=await User.findOne({uuid})
