@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
-
+  const isAdmin = currentUser&&currentUser.username === 'ramangoudanh'; 
   return (
     <div className='bg-gray-900'>
       <div className='flex justify-between items-center max-w-6xl mx-auto p-4'>
@@ -13,12 +13,12 @@ export default function Header() {
         <ul className='flex gap-4 text-white'>
           <li className='hidden md:block'>
             <Link to='/complaints' className='hover:text-gray-300'>
-              {currentUser ? 'Add Complaint' : ''}
+              {currentUser ?  !isAdmin ?'Add Complaint' : 'Analytics' : ''}
             </Link>
           </li>
           <li className='hidden md:block'>
             <Link to='/my-complaints' className='hover:text-gray-300'>
-              {currentUser ? 'My Complaints' : ''}
+              {currentUser ? !isAdmin ?'My Complaint' : 'ViewComplaints' : ''}
             </Link>
           </li>
           <li>
