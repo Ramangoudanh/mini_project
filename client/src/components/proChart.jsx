@@ -7,7 +7,7 @@ const ProChart = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("http://localhost:3000/api/complaint/getComplaintStatusData");
+                const response = await fetch("https://mini-project-fo4m.onrender.com/api/complaint/getComplaintStatusData");
                 if (!response.ok) {
                     throw new Error('Failed to fetch data');
                 }
