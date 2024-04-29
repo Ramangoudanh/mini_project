@@ -65,7 +65,7 @@ export default function EmailForm() {
   };
 
   try {
-      const response = await fetch("http://localhost:3000/api/complaint/addcomplaint", {
+      const response = await fetch("https://mini-project-fo4m.onrender.com/api/complaint/addcomplaint", {
           method: "POST",
           headers: {
               "Content-Type": "application/json"
