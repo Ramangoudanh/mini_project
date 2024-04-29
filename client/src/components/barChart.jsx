@@ -12,7 +12,7 @@ const BarChart = () => {
   useEffect(() => {
     const fetchComplaintCategories = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/complaint/getComplaintCategories");
+        const response = await fetch("https://mini-project-fo4m.onrender.com/api/complaint/getComplaintCategories");
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }

@@ -17,9 +17,9 @@ export default function MyComplaints() {
       try {
         let response;
         if (isAdmin) {
-          response = await fetch('http://localhost:3000/api/complaint/getComplaints');
+          response = await fetch('https://mini-project-fo4m.onrender.com/api/complaint/getComplaints');
         } else {
-          response = await fetch('http://localhost:3000/api/complaint/getMyComplaints', {
+          response = await fetch('https://mini-project-fo4m.onrender.com/api/complaint/getMyComplaints', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ export default function MyComplaints() {
 
   const handleStatusUpdate = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/complaint/updateComplaintStatus/${selectedComplaint._id}`, {
+      const response = await fetch(`https://mini-project-fo4m.onrender.com/api/complaint/updateComplaintStatus/${selectedComplaint._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

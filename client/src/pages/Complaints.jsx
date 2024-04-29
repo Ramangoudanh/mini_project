@@ -10,6 +10,7 @@ import {
   import { Box } from "@mui/material";
   import ComplaintsPieChart from '../components/Chart';
   import BarChart from '../components/barChart';
+  import ProChart from '../components/proChart';
   import { Card, CardContent, Typography } from '@mui/material';
 export default function EmailForm() {
 
@@ -99,60 +100,48 @@ const isAdmin = currentUser.username === 'ramangoudanh';
 return (
   <div>
     {isAdmin ? (
-  <div className="flex space-x-6">
-  <div className="w-1/2">
-    <Card variant="outlined" style={{ marginBottom: '20px' }}>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Complaints Pie Chart
-        </Typography>
-        <div style={{ height: '40vh' }}>
-          <ComplaintsPieChart />
-        </div>
-      </CardContent>
-    </Card>
-  </div>
-  <div className="w-1/2">
-    <Card variant="outlined">
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Bar Chart
-        </Typography>
-        <div style={{ height: '40vh', width: '100%' }}>
-          <BarChart />
-        </div>
-      </CardContent>
-    </Card>
-  </div>
+      <div>
+ <div className="flex">
+ <div className="w-1/2 h-1/2rounded-lg  mt-8 shadow-md">
+   <Card variant="outlined" style={{ marginBottom: '20px' }}>
+     <CardContent>
+       <Typography variant="h6" gutterBottom>
+         Complaints Pie Chart
+       </Typography>
+       <div style={{ height: '40vh' }}>
+       <BarChart /> 
+       </div>
+     </CardContent>
+   </Card>
+ </div>
+ <div className="w-1/2 h-1/2rounded-lg ml-3 mt-8 shadow-md">
+   <Card variant="outlined">
+     <CardContent>
+       <Typography variant="h6" gutterBottom>
+         Bar Chart
+       </Typography>
+       <div style={{ height: '40vh', width: '100%' }}>
+       <ProChart />
+       </div>
+     </CardContent>
+   </Card>
+ </div>
+</div>
+
+<div className="w-auto h-1/2  mt-8 p-6 bg-white rounded-lg shadow-md">
+ <Typography variant="h6" gutterBottom>
+   My Responsive Pie Chart
+ </Typography>
+ <div style={{ height: '40vh', width: '100%' }}>
+ <ComplaintsPieChart />
+ </div>
+</div>
 </div>
     ) : (
-      <div>
+      <div className="max-w-md mt-5 mx-auto bg-blue-100 shadow-md rounded-lg overflow-hidden">
+      <div className="p-6">
         <h2 className="text-2xl font-semibold mb-4">Compose Email</h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="senderEmail" className="block text-sm font-medium text-gray-700 mb-1">Sender Email</label>
-            <input
-              type="email"
-              id="senderEmail"
-              className="w-full border rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-              placeholder="Enter sender email"
-              value={senderEmail}
-              onChange={(e) => setSenderEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="receiverEmail" className="block text-sm font-medium text-gray-700 mb-1">Receiver Email</label>
-            <input
-              type="email"
-              id="receiverEmail"
-              className="w-full border rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-              placeholder="Enter receiver email"
-              value={receiverEmail}
-              onChange={(e) => setReceiverEmail(e.target.value)}
-              required
-            />
-          </div>
           <div>
             <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">Title</label>
             <input
@@ -204,6 +193,7 @@ return (
           <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Send Email</button>
         </form>
       </div>
+    </div>
     )}
   </div>
 );

@@ -226,7 +226,46 @@ export const getComplaintCategories = async (req, res) => {
   };
   
   
-  
+// In controllers/user.complaintcontroller.js
+
+export const getComplaintStatusData = async (req, res) => {
+    try {
+        // Fetch all complaints
+        const allComplaints = await Complaint.find({});
+
+        // Count complaints for each status category
+        const statusCounts = {};
+        allComplaints.forEach(complaint => {
+            const status = complaint.status;
+            if (statusCounts[status]) {
+                statusCounts[status]++;
+            } else {
+                statusCounts[status] = 1;
+            }
+        });
+
+        // Define random colors for each status category
+        const getRandomColor = () => {
+            const colors = ['#800080', '#008000', '#FFA500']; // Purple, Green, Orange
+            return colors[Math.floor(Math.random() * colors.length)];
+        };
+
+        // Construct the response array of objects
+        const statusList = Object.keys(statusCounts).map(status => ({
+            id: status,
+            label: status,
+            value: statusCounts[status],
+            color: getRandomColor()
+        }));
+
+        res.json(statusList);
+    } catch (error) {
+        console.error('Error generating complaint status data:', error);
+        res.status(500).json({ error: 'An error occurred while generating complaint status data' });
+    }
+};
+
+
   
 
   

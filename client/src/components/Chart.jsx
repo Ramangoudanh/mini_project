@@ -9,7 +9,7 @@ const ComplaintsPieChart = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:3000/api/complaint/getAllComplaints'); // Assuming your API endpoint is '/api/complaints'
+                const response = await fetch('https://mini-project-fo4m.onrender.com/api/complaint/getAllComplaints'); // Assuming your API endpoint is '/api/complaints'
                 const data = await response.json();
                 console.log(data);
                 setChartData(data);

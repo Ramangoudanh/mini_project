@@ -13,7 +13,7 @@ export default function App() {
   return (
     <BrowserRouter>
       {/* header */}
-      <Header />
+      <Header className='fixed z-50' />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
