@@ -10,7 +10,7 @@ function Status() {
 
   const fetchComplaintsByStatus = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/complaint/getComplaintsByStatus');
+      const response = await fetch('https://mini-project-fo4m.onrender.com/api/complaint/getComplaintsByStatus');
       if (response.ok) {
         const data = await response.json();
         setComplaintsByStatus(data);
