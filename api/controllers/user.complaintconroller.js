@@ -82,7 +82,7 @@ export const getMyComplaints= async(req,res)=>{
             }
         }
     }
-    console.log(newlist)
+    console.log({"the complaint list of a user":newlist})
     res.status(201).json({"the complaint list of a user":newlist})
 }
 
@@ -307,6 +307,33 @@ export const getAllIssueCategories = async (req, res) => {
     }
 };
 
-  
+export const getComplaintsByStatus = async (req, res) => {
+    try {
+        // Fetch all complaints
+        const allComplaints = await Complaint.find({});
+
+        // Initialize an object to store complaints by category
+        const complaintsByStatus = {};
+
+        // Iterate over each complaint
+        allComplaints.forEach(complaint => {
+            const status = complaint.status;
+
+            // If the category doesn't exist in the object, initialize it with an empty array
+            if (!complaintsByStatus[status]) {
+                complaintsByStatus[status] = [];
+            }
+
+            // Add the complaint to the array corresponding to its category
+            complaintsByStatus[status].push(complaint);
+        });
+
+        // Send the object array back to the client
+        res.status(200).json(complaintsByStatus);
+    } catch (error) {
+        console.error('Error fetching complaints by category:', error);
+        res.status(500).json({ error: 'An error occurred while fetching complaints by category' });
+    }
+};
 
   

@@ -1,5 +1,5 @@
 import express from 'express';
-import { addComplaint, getMyComplaints, getAllComplaints, getComplaints, updateComplaintStatus,getAllIssueCategories, getComplaintCategories,getComplaintsByCategory, getComplaintStatusData } from '../controllers/user.complaintconroller.js';
+import { addComplaint, getMyComplaints, getAllComplaints ,  getComplaints, updateComplaintStatus,getAllIssueCategories, getComplaintCategories,getComplaintsByCategory, getComplaintStatusData, getComplaintsByStatus } from '../controllers/user.complaintconroller.js';
 
 const router = express.Router();
 
@@ -12,5 +12,6 @@ router.get('/getComplaintStatusData', getComplaintStatusData); // New route to f
 router.put('/updateComplaintStatus/:id', updateComplaintStatus);
 router.get('/getComplaintsByCategory', getComplaintsByCategory);
 router.get('/getAllIssueCategories', getAllIssueCategories);
+router.get('/getComplaintsByStatus', getComplaintsByStatus);
 export default router;
 
