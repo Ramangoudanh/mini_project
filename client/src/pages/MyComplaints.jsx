@@ -115,7 +115,7 @@ export default function MyComplaints() {
     <div className="flex items-center justify-between mb-4 border-b border-gray-300 pb-">
       <h2 className="text-xl font-semibold text-gray-900 2">Complaints</h2>
       {/* Filter dropdown */}
-      <div className="flex items-center">
+      {isAdmin && <div className="flex items-center">
         <span className="mr-2">Filter:</span>
         <select
           className="border rounded-md py-2 px-3"
@@ -127,7 +127,7 @@ export default function MyComplaints() {
           <option value="status">Status</option>
           <option value="">default</option>
         </select>
-      </div>
+      </div>}
     </div>
 
     {/* Cards */}
