@@ -265,6 +265,47 @@ export const getComplaintStatusData = async (req, res) => {
     }
 };
 
+export const getComplaintsByCategory = async (req, res) => {
+    try {
+        // Fetch all complaints
+        const allComplaints = await Complaint.find({});
+
+        // Initialize an object to store complaints by category
+        const complaintsByCategory = {};
+
+        // Iterate over each complaint
+        allComplaints.forEach(complaint => {
+            const category = complaint.issue_category;
+
+            // If the category doesn't exist in the object, initialize it with an empty array
+            if (!complaintsByCategory[category]) {
+                complaintsByCategory[category] = [];
+            }
+
+            // Add the complaint to the array corresponding to its category
+            complaintsByCategory[category].push(complaint);
+        });
+
+        // Send the object array back to the client
+        res.status(200).json(complaintsByCategory);
+    } catch (error) {
+        console.error('Error fetching complaints by category:', error);
+        res.status(500).json({ error: 'An error occurred while fetching complaints by category' });
+    }
+};
+
+export const getAllIssueCategories = async (req, res) => {
+    try {
+        // Fetch distinct issue categories from the Complaint collection
+        const categories = await Complaint.distinct('issue_category');
+        
+        // Send the array of issue categories back to the client
+        res.status(200).json(categories);
+    } catch (error) {
+        console.error('Error fetching issue categories:', error);
+        res.status(500).json({ error: 'An error occurred while fetching issue categories' });
+    }
+};
 
   
 
