@@ -24,7 +24,7 @@ export default function MyComplaints() {
         if (isAdmin) {
           response = await fetch('https://mini-project-fo4m.onrender.com/api/complaint/getComplaints');
         } else {
-          response = await fetch('http://localhost:3000/api/complaint/getmycomplaints', {
+          response = await fetch('https://mini-project-fo4m.onrender.com/api/complaint/getmycomplaints', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
