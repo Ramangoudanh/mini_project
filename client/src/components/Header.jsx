@@ -42,9 +42,12 @@ const Header = () => {
           </div>
           <ul className='flex gap-4 text-white'>
             <li>
-              <Link to='/' className='hover:text-gray-300'>
-                Home
-              </Link>
+            {currentUser ? (
+        <Link to='/home' className='hover:text-gray-300'>
+          Home
+        </Link>):<Link to='/' className='hover:text-gray-300'>
+          Home
+        </Link> }
             </li>
             <li>
               <Link to='/about' className='hover:text-gray-300'>
