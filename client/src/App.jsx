@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Home from './pages/Home';
 import About from './pages/About';
 import SignIn from './pages/Signin';
@@ -13,14 +14,17 @@ import Catgorical from './pages/Catgorical';
 import Homepage from './pages/Hompage';
 import ChooseUser from './pages/ChooseUser';
 export default function App() {
+  const { currentUser, loading, error } = useSelector((state) => state.user);
   return (
     <BrowserRouter>
       {/* header */}
       <Header className='fixed z-50' />
       
       <Routes>
-        <Route path='/' element={<Homepage />} />
-        <Route path='/Home' element={<Home />} />
+      {!currentUser?<Route path='/' element={<Homepage />} />
+        : <Route path='/' element={<Home />} />}
+        <Route path='/Home' element={<Home />}/>
+        <Route path='/About' element={<About />}/>
         <Route path='/choose' element={<ChooseUser />} />
         <Route path='/status' element={<Status/>} />
         <Route path='/catgorical' element={<Catgorical/>} />

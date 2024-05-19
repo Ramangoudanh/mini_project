@@ -75,6 +75,7 @@ const Header = () => {
         name={currentUser ? currentUser.username : ""}
         menuItems={["Menu Item 1", "Menu Item 2", "Menu Item 3"]} // Add your menu items here
         isOpen={sidebarOpen}
+        isAdmin={isAdmin}
         toggleSidebar={toggleSidebar}
      className="z-1000 relative" />
     </>

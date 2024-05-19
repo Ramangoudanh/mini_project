@@ -39,7 +39,7 @@ const ChooseUser = () => {
                 <School fontSize="large" />
               </Box>
               <StyledTypography>User</StyledTypography>
-              Login as a user to explore course materials and assignments.
+              Login as a user to explore Anonymous complainting system of COllege.
             </StyledPaper>
           </Grid>
         </Grid>

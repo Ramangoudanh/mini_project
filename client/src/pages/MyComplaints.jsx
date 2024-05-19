@@ -133,7 +133,7 @@ export default function MyComplaints() {
     {/* Cards */}
     
     {/* Legend */}
-  <div className="container mx-auto relative">
+  <div className="container flex-col gap-4 mx-auto relative">
     {selectedFilter === 'status' ? (
       <Status />
     ) : selectedFilter === 'category' ? (
@@ -170,8 +170,8 @@ export default function MyComplaints() {
           ))}
       </div>
     )}
-  </div>
-  <div className="absolute bottom-4 mt-4 right-4 z-10 flex flex-row items-center space-x-4">
+  
+  <div className=" bottom-4 mt-4 right-4 z-10 flex flex-row items-center float-right space-x-4">
       <div className="flex items-center space-x-2">
         <span className="inline-block h-4 w-4 rounded-full bg-green-500"></span>
         <span className="text-sm">Resolved</span>
@@ -185,7 +185,7 @@ export default function MyComplaints() {
         <span className="text-sm">Closed</span>
       </div>
     </div>
-
+    </div>
 
 
     

@@ -155,18 +155,6 @@ return (
             />
           </div>
           <div>
-            <label htmlFor="complaint" className="block text-sm font-medium text-gray-700 mb-1">Complaint</label>
-            <textarea
-              id="complaint"
-              className="w-full border rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-              rows="4"
-              placeholder="Enter your complaint"
-              value={complaint}
-              onChange={(e) => setComplaint(e.target.value)}
-              required
-            />
-          </div>
-          <div>
             <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">Category</label>
             <select
               id="category"
@@ -182,6 +170,19 @@ return (
               <option value="Other">Other</option>
             </select>
           </div>
+          <div>
+            <label htmlFor="complaint" className="block text-sm font-medium text-gray-700 mb-1">Complaint</label>
+            <textarea
+              id="complaint"
+              className="w-full border rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+              rows="4"
+              placeholder="Enter your complaint"
+              value={complaint}
+              onChange={(e) => setComplaint(e.target.value)}
+              required
+            />
+          </div>
+          
           <div>
             <input
               type='file'

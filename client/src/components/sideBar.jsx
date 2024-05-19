@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Sidebar = ({ profilePic, name, isAdmin, isOpen, toggleSidebar }) => {
   let menuItems = [];
-
+ 
   if (isAdmin) {
     // Menu items for admin
     menuItems = [
