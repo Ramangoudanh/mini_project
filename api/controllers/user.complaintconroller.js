@@ -338,11 +338,14 @@ export const getComplaintsByStatus = async (req, res) => {
 
 export const getComplaintsBySpecificCategory = async (req, res) => {
     try {
-        const { category } = req.params;
+        const { category } = req.body; // Extract category from the request body
+        // Find all complaints that match the given category
         const complaints = await Complaint.find({ issue_category: category });
+        // Respond with the array of complaints
         res.status(200).json(complaints);
     } catch (error) {
         console.error('Error fetching complaints by category:', error);
+        // Respond with an error message if something goes wrong
         res.status(500).json({ error: 'An error occurred while fetching complaints by category' });
     }
 };

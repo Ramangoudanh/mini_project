@@ -13,6 +13,6 @@ router.put('/updateComplaintStatus/:id', updateComplaintStatus);
 router.get('/getComplaintsByCategory', getComplaintsByCategory);
 router.get('/getAllIssueCategories', getAllIssueCategories);
 router.get('/getComplaintsByStatus', getComplaintsByStatus);
-router.get('/:category', getComplaintsBySpecificCategory);
+router.get('/getComplaintsBySpecificCategory', getComplaintsBySpecificCategory);
 export default router;
 
