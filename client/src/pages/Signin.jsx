@@ -11,9 +11,9 @@ import OAuth from '../components/OAuth';
 export default function SignIn() {
   const [formData, setFormData] = useState({});
   const { loading, error } = useSelector((state) => state.user);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -35,7 +35,7 @@ export default function SignIn() {
         return;
       }
       dispatch(signInSuccess(data));
-      navigate('/HOme');
+      navigate('/Home');
     } catch (error) {
       dispatch(signInFailure(error));
     }

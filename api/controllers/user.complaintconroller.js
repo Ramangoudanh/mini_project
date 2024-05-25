@@ -336,4 +336,13 @@ export const getComplaintsByStatus = async (req, res) => {
     }
 };
 
-  
+export const getComplaintsBySpecificCategory = async (req, res) => {
+    try {
+        const { category } = req.params;
+        const complaints = await Complaint.find({ issue_category: category });
+        res.status(200).json(complaints);
+    } catch (error) {
+        console.error('Error fetching complaints by category:', error);
+        res.status(500).json({ error: 'An error occurred while fetching complaints by category' });
+    }
+};
