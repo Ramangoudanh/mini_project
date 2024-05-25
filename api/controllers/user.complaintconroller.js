@@ -341,7 +341,7 @@ export const getComplaintsBySpecificCategory = async (req, res) => {
     try {
         const { category,status } = req.body; // Extract category from the request body
         // Find all complaints that match the given category
-        const complaints = await Complaint.find({ issue_category: category ,Status:status});
+        const complaints = await Complaint.find({ issue_category: category ,status});
         // Respond with the array of complaints
         res.status(200).json(complaints);
     } catch (error) {
