@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+
 import Catgorical from './Catgorical';
 import Status from './Status';
 export default function MyComplaints() {
@@ -10,19 +11,35 @@ export default function MyComplaints() {
   const [newStatus, setNewStatus] = useState('');
   const { currentUser } = useSelector((state) => state.user);
   const isAdmin = currentUser.username === 'ramangoudanh'; 
-  const [selectedFilter, setSelectedFilter] = useState(''); 
+  const [selectedFilter, setSelectedFilter] = useState('');
+  const [category,setCategory]=useState('') 
+  const [status,setStatus]=useState('')
+  const [path,setPath]=useState(window.location.pathname);
+     
+  useEffect(() => {
+    setPath(window.location.pathname);
+    const currentUrl = path;
+    const parts = currentUrl.split("/");
+    if(parts[parts.length - 2]==="House%20keeping")parts[parts.length - 2]="House keeping"
+    setCategory(parts[parts.length - 2]);
+    if(parts.length>3) setStatus(parts[parts.length-1])
+  }, [path]);
 
   useEffect(() => {
-  
-
-    
     const fetchData = async () => {
-          if (!currentUser) return;
+      if (!currentUser || !category) return;
 
       try {
         let response;
+
         if (isAdmin) {
-          response = await fetch('https://mini-project-fo4m.onrender.com/api/complaint/getComplaints');
+          response = await fetch(`https://mini-project-fo4m.onrender.com/api/complaint/getComplaintsBySpecificCategory`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ category,status }),
+          });
         } else {
           response = await fetch('https://mini-project-fo4m.onrender.com/api/complaint/getmycomplaints', {
             method: 'POST',
@@ -39,7 +56,6 @@ export default function MyComplaints() {
 
         const data = await response.json();
 
-        // Set complaints based on the response data
         if (isAdmin) {
           setComplaintList(data);
         } else {
@@ -56,7 +72,7 @@ export default function MyComplaints() {
     };
 
     fetchData();
-  }, [currentUser]);
+  }, [currentUser, category, isAdmin]);
 
   const openModal = (complaint) => {
     setSelectedComplaint(complaint);

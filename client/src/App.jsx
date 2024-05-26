@@ -34,7 +34,7 @@ export default function App() {
         <Route path='/complaints' element={<Complaints />}/>
         </Route>
         <Route element={<PrivateRoute />}>
-         <Route path='/my-complaints' element={<MyComplaints />}/>
+         <Route path='/my-complaints/*' element={<MyComplaints />}/>
          </Route>
         <Route element={<PrivateRoute />}>
          <Route path='/profile' element={<Profile />} />

@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import contactEmail from '../nodemailersetup.js';
 import axios from 'axios';
-import Status from '../../client/src/pages/Status.jsx';
+
 export const addComplaint=async(req,res)=>{
     const {uuid,complaint,complaint_proof,issue_category,title}=req.body;
     try{
@@ -341,7 +341,7 @@ export const getComplaintsBySpecificCategory = async (req, res) => {
     try {
         const { category,status } = req.body; // Extract category from the request body
         // Find all complaints that match the given category
-        const complaints = await Complaint.find({ issue_category: category ,status});
+        const complaints = await Complaint.find({ issue_category: category});
         // Respond with the array of complaints
         res.status(200).json(complaints);
     } catch (error) {
