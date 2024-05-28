@@ -38,10 +38,10 @@ export default function SignUp() {
   };
 
   return (
-    <center>
-      <div className='w-full max-w-xl px-8 py-4 bg-white rounded-lg shadow-lg mt-8'>
-        <h1 className='text-3xl font-semibold mb-4'>Sign Up</h1>
-        <p className='text-gray-600 mb-4'>Create your account.</p>
+    <div className='flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-500 to-blue-500'>
+      <div className='w-full max-w-xl px-8 py-4 bg-white rounded-lg shadow-lg mt-4'>
+        <h1 className='text-3xl font-semibold mb-4 text-center text-white bg-gradient-to-r from-purple-500 to-blue-500 p-4 rounded-lg'>Sign Up</h1>
+        <p className='text-gray-600 mb-4 text-center'>Create your account.</p>
         <form onSubmit={handleSubmit} className='mb-4'>
           <div className='mb-2'>
             <label htmlFor='username' className='block text-gray-700 font-medium'>
@@ -100,13 +100,13 @@ export default function SignUp() {
             <span className="ml-2">Sign in with Google</span>
           </button>
         </div>
-        <div className='text-center mt-4'>
-          <p>Already have an account?</p>
+        <div className='text-center mt-2'>
+          <p className='text-white'>Already have an account?</p>
           <Link to='/sign-in' className='text-blue-500'>
             Sign in
           </Link>
         </div>
       </div>
-    </center>
-  );
+    </div>
+  );
 }

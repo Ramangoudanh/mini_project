@@ -31,11 +31,13 @@ const Homepage = () => {
                                 </LightPurpleButton>
                             </StyledLink>
                             
-                            <StyledText>
-                                Don't have an account?{' '}
-                                <Link to="/Sign-UP" style={{color:"#550080"}}>
-                                    Sign up
-                                </Link>
+                            <StyledText className='text-red'>
+                            <div className='flex gap-2 mt-5 justify-center'>
+          <p className='text-red-500'>Don't have an account?</p>
+          <Link to='/sign-up'>
+            <span className='text-blue-500'>Sign up</span>
+          </Link>
+        </div>
                             </StyledText>
                         </StyledBox>
                     </StyledPaper>

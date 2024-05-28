@@ -15,34 +15,36 @@ const ChooseUser = () => {
   const navigate = useNavigate();
   const [loader, setLoader] = React.useState(false);
 
-  const handleNavigate = () => {
+  const handleNavigate = (userType) => {
     setLoader(true);
-    navigate('/Sign-in');
+    navigate('/sign-in', { state: { userType } }); // Pass userType for conditional rendering
   };
 
   return (
     <StyledContainer>
       <Container>
-        <Grid container spacing={2} justifyContent="center">
-          <Grid item xs={12} sm={6} md={4}>
-            <StyledPaper elevation={3} onClick={handleNavigate}>
-              <Box mb={2}>
-                <AccountCircle fontSize="large" />
+        <CenteredGrid container spacing={6} justifyContent="center" alignItems="center">
+          <Grid item>
+            <StyledPaper elevation={3} onClick={() => handleNavigate('admin')}>
+              <Box mb={2} display="flex" justifyContent="center" alignItems="center">
+                {/* Centered admin logo */}
+                <div style={{ backgroundImage: 'url("https://tse3.mm.bing.net/th?id=OIP.nhE9X7SCCvOiPk6C_YkQkwHaHa&pid=Api&P=0&h=180")', width: '80px', height: '80px', backgroundSize: 'cover', backgroundPosition: 'center' }} />
               </Box>
               <StyledTypography>Admin</StyledTypography>
-              Login as an administrator to access the dashboard to manage app data.
+              Login as an administrator to access the dashboard and manage app data.
             </StyledPaper>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <StyledPaper elevation={3} onClick={handleNavigate}>
-              <Box mb={2}>
-                <School fontSize="large" />
+          <Grid item>
+            <StyledPaper elevation={3} onClick={() => handleNavigate('user')}>
+              <Box mb={2} display="flex" justifyContent="center" alignItems="center">
+                {/* Centered user logo */}
+                <div style={{ backgroundImage: 'url("https://tse1.mm.bing.net/th?id=OIP.f3DM2upCo-p_NPRwBAwbKQHaHa&pid=Api&rs=1&c=1&qlt=95&w=121&h=121")', width: '80px', height: '80px', backgroundSize: 'cover', backgroundPosition: 'center' }} />
               </Box>
               <StyledTypography>User</StyledTypography>
-              Login as a user to explore Anonymous complainting system of COllege.
+              Login as a user to explore the Anonymous complaining system of the College.
             </StyledPaper>
           </Grid>
-        </Grid>
+        </CenteredGrid>
       </Container>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -59,14 +61,23 @@ export default ChooseUser;
 
 const StyledContainer = styled.div`
   background: linear-gradient(to bottom, #411d70, #19118b);
-  height: 120vh;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const CenteredGrid = styled(Grid)`
   display: flex;
   justify-content: center;
-  padding: 2rem;
+  align-items: center;
+  width: 100%;
 `;
 
 const StyledPaper = styled(Paper)`
-  padding: 20px;
+  padding: 40px;
+  width: 350px;
+  height: 300px;
   text-align: center;
   background-color: #1f1f38;
   color: rgba(255, 255, 255, 0.6);
@@ -79,5 +90,5 @@ const StyledPaper = styled(Paper)`
 `;
 
 const StyledTypography = styled.h2`
-  margin-bottom: 10px;
+  margin-bottom: 10px;
 `;

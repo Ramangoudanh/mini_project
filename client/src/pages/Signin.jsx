@@ -42,9 +42,9 @@ export default function SignIn() {
   };
 
   return (
-    <center>
-      <div className='w-full max-w-lg px-8 py-4 bg-white rounded-lg shadow-lg mt-8'>
-        <h1 className='text-3xl font-semibold mb-7'>Sign In</h1>
+    <div className='flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-500 to-blue-500'>
+      <div className='w-full max-w-lg px-8 py-4 bg-white rounded-lg shadow-lg'>
+        <h1 className='text-3xl font-semibold mb-7 text-center text-white bg-gradient-to-r from-purple-500 to-blue-500 p-4 rounded-lg'>Sign In</h1>
         <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
           <input
             type='email'
@@ -68,16 +68,16 @@ export default function SignIn() {
           </button>
           <OAuth />
         </form>
-        <div className='flex gap-2 mt-5'>
-          <p>Don't have an account?</p>
+        <div className='flex gap-2 mt-5 justify-center'>
+          <p className='text-red-500'>Don't have an account?</p>
           <Link to='/sign-up'>
             <span className='text-blue-500'>Sign up</span>
           </Link>
         </div>
-        <p className='text-red-700 mt-5'>
+        <p className='text-red-700 mt-5 text-center'>
           {error ? error.message || 'Something went wrong!' : ''}
         </p>
       </div>
-    </center>
-  );
+  </div>
+);
 }

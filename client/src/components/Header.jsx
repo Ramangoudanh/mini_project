@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Sidebar from "./sideBar";
 
 const Header = () => {
@@ -8,10 +8,19 @@ const Header = () => {
   const isAdmin = currentUser && currentUser.username === 'ramangoudanh';
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
+  const location = useLocation();
+
+  useEffect(() => {
+    // Close the sidebar for sign-in and sign-up paths
+    if (location.pathname === '/sign-in' || location.pathname === '/sign-up'||location.pathname === '/' ||location.pathname === '/choose') {
+      setSidebarOpen(false);
+    }else  setSidebarOpen(true);
+  }, [location.pathname]);
+
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
-
+   
   return (
     <>
       <div className='bg-gray-900'>
