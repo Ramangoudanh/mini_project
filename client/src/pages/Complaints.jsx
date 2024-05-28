@@ -12,10 +12,15 @@ import {
   import BarChart from '../components/barChart';
   import ProChart from '../components/proChart';
   import { Card, CardContent, Typography } from '@mui/material';
+  
+import Slider from 'react-slick';
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
+//import { Card, CardContent, Typography } from '@material-ui/core';
 export default function EmailForm() {
 
-  const [senderEmail, setSenderEmail] = useState('');
-  const [receiverEmail, setReceiverEmail] = useState('');
+  const [email, setEmail] = useState('');
+  
   const [title, setTitle] = useState('');
   const [complaint, setComplaint] = useState('');
   const [category, setCategory] = useState('');
@@ -57,7 +62,6 @@ export default function EmailForm() {
     
     const formData = {
      uuid: currentUser.uuid,
-      senderEmail,
       complaint,
       title,
       complaint_proof:link,
@@ -85,14 +89,39 @@ export default function EmailForm() {
   }
 
     console.log({
-      senderEmail,
-      receiverEmail,
+      
       title,
       complaint,
       category
     });
   };
 
+  const chartStyle = {
+    height: '40vh', // Increased height
+    width: '100%', // Full width within card
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  };
+  const sliderRef = useRef(null);
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1
+  };
+
+ 
+
+  const handleNext = () => {
+    sliderRef.current.slickNext();
+  };
+
+  const handlePrev = () => {
+    sliderRef.current.slickPrev();
+  };
  
 
 const isAdmin = currentUser.username === 'ramangoudanh'; 
@@ -100,43 +129,49 @@ const isAdmin = currentUser.username === 'ramangoudanh';
 return (
   <div>
     {isAdmin ? (
-      <div>
- <div className="flex">
- <div className="w-1/2 h-1/2rounded-lg  mt-8 shadow-md">
-   <Card variant="outlined" style={{ marginBottom: '20px' }}>
-     <CardContent>
-       <Typography variant="h6" gutterBottom>
-         Complaints Pie Chart
-       </Typography>
-       <div style={{ height: '40vh' }}>
-       <BarChart /> 
-       </div>
-     </CardContent>
-   </Card>
- </div>
- <div className="w-1/2 h-1/2rounded-lg ml-3 mt-8 shadow-md">
-   <Card variant="outlined">
-     <CardContent>
-       <Typography variant="h6" gutterBottom>
-         Bar Chart
-       </Typography>
-       <div style={{ height: '40vh', width: '100%' }}>
-       <ProChart />
-       </div>
-     </CardContent>
-   </Card>
- </div>
-</div>
-
-<div className="w-auto h-1/2  mt-8 p-6 bg-white rounded-lg shadow-md">
- <Typography variant="h6" gutterBottom>
-   My Responsive Pie Chart
- </Typography>
- <div style={{ height: '40vh', width: '100%' }}>
- <ComplaintsPieChart />
- </div>
-</div>
-</div>
+            <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+      <Typography variant="h4" gutterBottom style={{ textAlign: 'center', marginBottom: '20px' }}>
+        Analytics
+      </Typography>
+      <Slider ref={sliderRef} {...settings} style={{ width: '90%' }}>
+        <div onClick={handleNext} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'center' }}>
+          <Card variant="outlined" style={{ marginBottom: '20px', width: '100%' }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom style={{ textAlign: 'center' }}>
+                Complaints Pie Chart
+              </Typography>
+              <div style={chartStyle}>
+                <BarChart />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        <div onClick={handleNext} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'center' }}>
+          <Card variant="outlined" style={{ width: '100%' }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom style={{ textAlign: 'center' }}>
+                Bar Chart
+              </Typography>
+              <div style={chartStyle}>
+                <ProChart />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        <div onClick={handleNext} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'center' }}>
+          <Card variant="outlined" style={{ width: '100%' }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom style={{ textAlign: 'center' }}>
+                My Responsive Pie Chart
+              </Typography>
+              <div style={chartStyle}>
+                <ComplaintsPieChart />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </Slider>
+    </div>
     ) : (
       <div className="max-w-md mt-5 mx-auto bg-blue-100 shadow-md rounded-lg overflow-hidden">
       <div className="p-6">
@@ -151,6 +186,18 @@ return (
               placeholder="Enter title of complaint"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">email</label>
+            <input
+              type="email"
+              id="email"
+              className="w-full border rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>

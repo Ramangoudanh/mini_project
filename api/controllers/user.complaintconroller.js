@@ -97,6 +97,7 @@ export const getComplaints = async (req, res) => {
         res.status(500).json({ error: 'An error occurred while fetching complaints' });
     }
 };
+
 function generateColors(count) {
     const colors = [];
     const hueIncrement = 360 / count;
@@ -341,7 +342,8 @@ export const getComplaintsBySpecificCategory = async (req, res) => {
     try {
         const { category,status } = req.body; // Extract category from the request body
         // Find all complaints that match the given category
-        const complaints = await Complaint.find({ issue_category: category});
+        // const complaints = await Complaint.find({ issue_category: category,status});
+        const complaints=await Complaint.find({});
         // Respond with the array of complaints
         res.status(200).json(complaints);
     } catch (error) {

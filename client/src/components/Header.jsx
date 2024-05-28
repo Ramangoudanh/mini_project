@@ -6,7 +6,7 @@ import Sidebar from "./sideBar";
 const Header = () => {
   const { currentUser } = useSelector((state) => state.user);
   const isAdmin = currentUser && currentUser.username === 'ramangoudanh';
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -36,18 +36,23 @@ const Header = () => {
                 />
               </svg>
             </button>
+          </div>
+          <div className="flex-grow text-center">
             <Link to='/' className='text-white text-2xl font-bold'>
               Complaint App
             </Link>
           </div>
           <ul className='flex gap-4 text-white'>
             <li>
-            {currentUser ? (
-        <Link to='/home' className='hover:text-gray-300'>
-          Home
-        </Link>):<Link to='/' className='hover:text-gray-300'>
-          Home
-        </Link> }
+              {currentUser ? (
+                <Link to='/home' className='hover:text-gray-300'>
+                  Home
+                </Link>
+              ) : (
+                <Link to='/' className='hover:text-gray-300'>
+                  Home
+                </Link>
+              )}
             </li>
             <li>
               <Link to='/about' className='hover:text-gray-300'>
@@ -77,7 +82,8 @@ const Header = () => {
         isOpen={sidebarOpen}
         isAdmin={isAdmin}
         toggleSidebar={toggleSidebar}
-     className="z-1000 relative" />
+        className="z-1000 relative" 
+      />
     </>
   );
 };
