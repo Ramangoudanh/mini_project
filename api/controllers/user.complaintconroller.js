@@ -78,7 +78,7 @@ export const getMyComplaints= async(req,res)=>{
             let result=await bcrypt.compare(complaints[i],complaint[j].complaint_id);
             
             if(result){
-                let comp={'complaint_id':complaints[i],'complaint':complaint[j].complaint,'title':complaint[j].title,'complaint_proof':complaint[j].complaint_proof,'issue_category':complaint[j].issue_category,'status':complaint[j].status}
+                let comp={'complaint_id':complaints[i],'complaint':complaint[j].complaint,'title':complaint[j].title,'complaint_proof':complaint[j].complaint_proof,'issue_category':complaint[j].issue_category,'status':complaint[j].status,"curStatus":complaint[j].curStatus,"lastupdate":complaint[j].lastupdate,"date":complaint[j].date}
                 newlist.push(comp);
             }
         }
@@ -350,5 +350,31 @@ export const getComplaintsBySpecificCategory = async (req, res) => {
         console.error('Error fetching complaints by category:', error);
         // Respond with an error message if something goes wrong
         res.status(500).json({ error: 'An error occurred while fetching complaints by category' });
+    }
+};
+
+export const updateCurStatus = async (req, res) => {
+    const { _id, curStatus } = req.body;
+
+    if (!_id || !curStatus) {
+        return res.status(400).json({ error: 'complaint_id and curStatus are required' });
+    }
+
+    try {
+        const updatedComplaint = await Complaint.findOneAndUpdate(
+            { _id },
+            { curStatus },
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedComplaint) {
+
+            return res.status(404).json({ error: 'Complaint not found' });
+        }
+        updatedComplaint.lastupdate=Date.now
+        res.status(200).json(updatedComplaint);
+    } catch (error) {
+        console.error('Error updating curStatus:', error);
+        res.status(500).json({ error: 'An error occurred while updating curStatus' });
     }
 };

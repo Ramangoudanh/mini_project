@@ -1,8 +1,9 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-
-import Catgorical from './Catgorical';
+import Categorical from './Catgorical';
 import Status from './Status';
+import { FiInfo } from 'react-icons/fi'; // Import info icon from react-icons
+
 export default function MyComplaints() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,19 +11,48 @@ export default function MyComplaints() {
   const [selectedComplaint, setSelectedComplaint] = useState(null);
   const [newStatus, setNewStatus] = useState('');
   const { currentUser } = useSelector((state) => state.user);
-  const isAdmin = currentUser.username === 'ramangoudanh'; 
+  const isAdmin = currentUser.username === 'ramangoudanh';
   const [selectedFilter, setSelectedFilter] = useState('');
-  const [category,setCategory]=useState('') 
-  const [status,setStatus]=useState('')
-  const [path,setPath]=useState(window.location.pathname);
-     
+  const [category, setCategory] = useState('');
+  const [status, setStatus] = useState('');
+  const [path, setPath] = useState(window.location.pathname);
+  const [newCurStatus, setNewCurStatus] = useState("");
+  const handleCurStatusChange = (e) => {
+    setNewCurStatus(e.target.value);
+  };
+
+  const handleCurStatusUpdate = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/complaint/updateCurStatus', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          _id: selectedComplaint._id,
+          curStatus: newCurStatus,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to update status');
+      }
+  
+      const updatedComplaint = await response.json();
+      // Update the UI or state with the updated complaint if needed
+      console.log('Complaint updated successfully:', updatedComplaint);
+      closeModal();
+    } catch (error) {
+      console.error('Error updating status:', error);
+    }
+  };
+  
+  
   useEffect(() => {
     setPath(window.location.pathname);
     const currentUrl = path;
     const parts = currentUrl.split("/");
-    
     setCategory(parts[parts.length - 1]);
-   
   }, [path]);
 
   useEffect(() => {
@@ -33,7 +63,7 @@ export default function MyComplaints() {
         let response;
 
         if (isAdmin) {
-          console.log(category,status);
+          console.log(category, status);
           console.log("entered here");
           response = await fetch(`http://localhost:3000/api/complaint/getComplaintsBySpecificCategory`, {
             method: 'POST',
@@ -42,7 +72,6 @@ export default function MyComplaints() {
             },
             body: JSON.stringify({ category }),
           });
-          
         } else {
           console.log("entered here");
           response = await fetch('http://localhost:3000/api/complaint/getmycomplaints', {
@@ -51,9 +80,8 @@ export default function MyComplaints() {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({ uuid: currentUser.uuid }),
-          }
-        );
-        console.log(response);
+          });
+          console.log(response);
         }
 
         if (!response.ok) {
@@ -63,25 +91,15 @@ export default function MyComplaints() {
         const data = await response.json();
         console.log(data)
         if (isAdmin) {
-          //let a=data['the complaint list of a user'];
-          //console.log(data);
-          console.log(category,status)
-          let b=[]
-          for(let i=0;i<data.length;i++){
-            //console.log(data[i]);
-            console.log(category,status)
-            console.log(data[i].issue_category,data[i].status)
-            if(data[i].issue_category===category){
+          let b = []
+          for (let i = 0; i < data.length; i++) {
+            if (data[i].issue_category === category) {
               b.push(data[i])
             }
           }
-          console.log(b)
           setComplaintList(b);
         } else {
-          console.log(data);
-
           setComplaintList(data['the complaint list of a user']);
-          console.log(data['the complaint list of a user']);
         }
 
         setLoading(false);
@@ -117,11 +135,11 @@ export default function MyComplaints() {
         },
         body: JSON.stringify({ status: newStatus }),
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to update complaint status');
       }
-  
+
       const data = await response.json();
       console.log('Complaint status updated successfully:', data);
       closeModal(); // Close modal after successful update
@@ -129,8 +147,9 @@ export default function MyComplaints() {
       console.error('Error updating complaint status:', error);
     }
   };
+
   function getStatusColor(status) {
-    switch(status) {
+    switch (status) {
       case "Resolved":
         return "bg-green-500";
       case "Pending":
@@ -141,6 +160,7 @@ export default function MyComplaints() {
         return ""; // Return default color class or handle the case where status is not recognized
     }
   }
+
   const groupedComplaints = complaintList.reduce((groups, complaint) => {
     const { status } = complaint;
     if (!groups[status]) {
@@ -149,9 +169,8 @@ export default function MyComplaints() {
     groups[status].push(complaint);
     return groups;
   }, {});
- 
 
-  if (loading) return <div>Loading......................................................................-----</div>;
+  if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -170,12 +189,12 @@ export default function MyComplaints() {
               <option value="">Select Filter</option>
               <option value="category">Category</option>
               <option value="status">Status</option>
-              <option value="">default</option>
+              <option value="">Default</option>
             </select>
           </div>
         )}
       </div>
-  
+
       {/* Cards */}
       <div className="flex-col gap-4 mx-auto relative">
         {selectedFilter === 'status' ? (
@@ -190,16 +209,24 @@ export default function MyComplaints() {
                 {groupedComplaints[status].map((complaint, index) => (
                   <div
                     key={index}
-                    className="bg-white rounded-lg shadow-md p-4 cursor-pointer relative"
-                    onClick={() => isAdmin && openModal(complaint)}
+                    className="bg-white rounded-lg shadow-md p-4 relative"
                   >
                     {/* Status Circle */}
                     <span
-                      className={`absolute top-2 right-2 inline-block h-4 w-4 rounded-full ${getStatusColor(
-                        complaint.status
-                      )}`}
+                      className={`absolute top-2 right-2 inline-block h-4
+                      w-4 rounded-full ${getStatusColor(complaint.status)}`}
                     ></span>
-  
+                    
+                    {/* Info Icon */}
+                    {  (
+                      <button
+                        className="absolute bottom-2 right-2 p-1 text-blue-500 hover:text-blue-700"
+                        onClick={() => openModal(complaint)}
+                      >
+                        <FiInfo size={20} />
+                      </button>
+                    )}
+
                     <p className="text-gray-600 mb-2">
                       Title: {complaint.title || 'No Title'}
                     </p>
@@ -221,7 +248,7 @@ export default function MyComplaints() {
           </div>
         )}
       </div>
-  
+
       {/* Legend */}
       <div className="fixed bottom-4 right-4 z-10 flex flex-row items-center space-x-4">
         <div className="flex items-center space-x-2">
@@ -237,83 +264,100 @@ export default function MyComplaints() {
           <span className="text-sm">Complaint Registered</span>
         </div>
       </div>
-  
+
       {/* Modal for complaint details and status change */}
       {selectedComplaint && (
-        <div
-          id="default-modal"
-          tabIndex="-1"
-          aria-hidden="true"
-          className="fixed inset-0 overflow-y-auto overflow-x-hidden z-50 flex items-center justify-center"
-        >
-          <div className="relative p-4 w-full max-w-2xl max-h-full">
-            <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  {selectedComplaint.title}
-                </h3>
-                <button
-                  type="button"
-                  className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                  onClick={closeModal}
-                >
-                  <svg
-                    className="w-3 h-3"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 14 14"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                    />
-                  </svg>
-                  <span className="sr-only">Close modal</span>
-                </button>
-              </div>
-              <div className="p-4 md:p-5 space-y-4">
-              <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                 Email: xxxxx@gmail.com
-                </p>
-                <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                  {selectedComplaint.complaint}
-                </p>
-                <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-              Timing: {selectedComplaint.date.split('T')[0]}
-                 </p>
-              </div>
-              <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                <label htmlFor="status" className="block mr-4">
-                  Change Status:
-                </label>
-                <select
-                  id="status"
-                  value={newStatus}
-                  onChange={handleStatusChange}
-                  className="border rounded-md py-2 px-3"
-                >
-                  <option value="">Select Status</option>
-                  <option value="Resolved">Resolved</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Closed">Closed</option>
-                </select>
-                <button
-                  type="button"
-                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                  onClick={handleStatusUpdate}
-                >
-                  Update Status
-                </button>
-              </div>
-            </div>
-          </div>
+  <div
+    id="default-modal"
+    tabIndex="-1"
+    aria-hidden="true"
+    className="fixed inset-0 overflow-y-auto overflow-x-hidden z-50 flex items-center justify-center" >
+    <div className="relative p-4 w-full max-w-2xl max-h-full">
+      <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+            {selectedComplaint.title}
+          </h3>
+          <button
+            type="button"
+            className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+            onClick={closeModal}
+          >
+            <svg
+              className="w-3 h-3"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 14 14"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
+            <span className="sr-only">Close modal</span>
+          </button>
         </div>
-      )}
+        <div className="p-4 md:p-5 space-y-4">
+          <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+            Email: xxxxx@gmail.com
+          </p>
+          <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+            {selectedComplaint.complaint}
+          </p>
+          <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+            Registered On: {selectedComplaint.date}
+          </p>
+          <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+            Remarks: {selectedComplaint.curStatus}
+          </p>
+          <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+             last Update: {selectedComplaint.lastupdate}
+          </p>
+        </div>
+      { isAdmin && <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+          <label htmlFor="status" className="block mr-4">
+            Change Status:
+          </label>
+          <select
+            id="status"
+            value={newStatus}
+            onChange={handleStatusChange}
+            className="border rounded-md py-2 px-3"
+          >
+            <option value="">Select Status</option>
+            <option value="Resolved">Resolved</option>
+            <option value="Pending">Pending</option>
+            <option value="Closed">Closed</option>
+          </select>
+          <label htmlFor="curStatus" className="block mr-4 ml-4">
+            Change Current Status:
+          </label>
+          <input
+            type="text"
+            id="curStatus"
+            value={newCurStatus}
+            onChange={handleCurStatusChange}
+            className="border rounded-md py-2 px-3"
+            placeholder="Enter Current Status"
+          />
+          <button
+            type="button"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            onClick={handleCurStatusUpdate}
+          >
+            Update Status
+          </button>
+        </div>}
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
-  
 }
+ 

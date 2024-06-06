@@ -7,7 +7,7 @@ const ComplaintSchema = new mongoose.Schema({
   // },
   title: {
     type: String,
-    //required: true,
+    // required: true,
   },
   complaint: {
     type: String,
@@ -29,6 +29,15 @@ const ComplaintSchema = new mongoose.Schema({
     type: String,
     required: true,
     default: "Complaint Registered",
+  },
+  curStatus: {
+    type: String,
+    required: true,
+    default: "Complaint taken",
+  },
+  lastupdate: {
+    type: Date,
+    default: Date.now,
   },
   date: {
     type: Date,
