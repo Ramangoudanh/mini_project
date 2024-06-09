@@ -11,7 +11,8 @@ import {
   getComplaintStatusData, 
   getComplaintsByStatus, 
   getComplaintsBySpecificCategory, 
-  updateCurStatus // Import the new controller function
+  updateCurStatus, // Import the new controller function
+  sendEmailToCategoryHead
 } from '../controllers/user.complaintconroller.js'; // Corrected typo in filename
 
 const router = express.Router();
@@ -28,6 +29,7 @@ router.get('/getAllIssueCategories', getAllIssueCategories);
 router.get('/getComplaintsByStatus', getComplaintsByStatus);
 router.post('/getComplaintsBySpecificCategory', getComplaintsBySpecificCategory);
 router.post('/updateCurStatus', updateCurStatus); // New route to update curStatus
+router.post('/sendEmailToCategoryHead',sendEmailToCategoryHead);
 
 export default router;
 

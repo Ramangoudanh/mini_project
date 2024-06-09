@@ -46,10 +46,11 @@ export const addComplaint=async(req,res)=>{
     //send the email now
     const mail = {
         from: "ComplaintBox",
-        to: "msanjay1907@gmail.com",
+        to: "ramangoudanh@gmail.com",
         subject: `Complaint Reagarding ${issue_category}`,
         html: `
             <p>Complaint: ${complaint_to_be_added}</p>
+            <p>Category Selected:${issue_category}</p>
             <p>Proof:${complaint_proof}</p>
             `,
     };
@@ -72,7 +73,7 @@ export const getMyComplaints= async(req,res)=>{
     let complaints=user.previous_complaints;
     let newlist=[]
     let complaint=await Complaint.find({});
-    console.log(complaint,complaints);
+    //console.log(complaint,complaints);
     for(let i =0;i<complaints.length;i++){
         for(let j=0;j<complaint.length;j++){
             let result=await bcrypt.compare(complaints[i],complaint[j].complaint_id);
@@ -353,8 +354,44 @@ export const getComplaintsBySpecificCategory = async (req, res) => {
     }
 };
 
+//Function to send mail to the user when status is updated
+async function sendEmailToUser(hashed_complaint_id,status,statusProof,curStatus,title){
+    const user=await User.find({})
+    //user.previous_complaints
+     //548a37e4-8d8b-4767-bcc4-fb3bbcc5885573b2d498-7f8b-4a6f-8252-bb917b1aa71f
+    for(let i=0;i<user.length;i++){
+        let a=user[i].previous_complaints
+        for(let j=0;j<a.length;j++){
+            if(bcrypt.compareSync(a[j],hashed_complaint_id)){
+                try{
+                    const mail = {
+                        from: "Admin",
+                        to: `${user[i].email}`,
+                        subject: `Update Reagarding Complaint ${title}`,
+                        html: `
+                            <p>Current Status:${curStatus}</p>
+                            <p>Status:${status}</p>
+                            <p>Status Proof:${statusProof}</>
+                            <p>You are requested to reply to this mail as soon as possible with latest updates.</p>
+                            <p>Disclaimer:Replies are an account of proof and can be recorded for updation purposes.</p>
+                            `,
+                    };
+                    await contactEmail.sendMail(mail, (error) => {
+                        console.log(error)
+                    });
+                    }catch(e){
+                        console.log(e)
+                    }
+                    console.log(`mail sent to ${user[i].email}`)
+                break;
+            }
+        }
+    }
+    return;
+}
+
 export const updateCurStatus = async (req, res) => {
-    const { _id, curStatus } = req.body;
+    const { _id, curStatus,status,statusProof,title,complaint_id } = req.body;
 
     if (!_id || !curStatus) {
         return res.status(400).json({ error: 'complaint_id and curStatus are required' });
@@ -363,7 +400,7 @@ export const updateCurStatus = async (req, res) => {
     try {
         const updatedComplaint = await Complaint.findOneAndUpdate(
             { _id },
-            { curStatus },
+            { curStatus,statusProof,status },
             { new: true } // Return the updated document
         );
 
@@ -372,9 +409,45 @@ export const updateCurStatus = async (req, res) => {
             return res.status(404).json({ error: 'Complaint not found' });
         }
         updatedComplaint.lastupdate=Date.now
+        await sendEmailToUser(complaint_id,status,statusProof,curStatus,title)
         res.status(200).json(updatedComplaint);
     } catch (error) {
         console.error('Error updating curStatus:', error);
         res.status(500).json({ error: 'An error occurred while updating curStatus' });
     }
 };
+
+export const sendEmailToCategoryHead=async(req,res)=>{
+    //this is for the current demonstaration this we will change
+   
+    try{
+    const categoryMap={
+        "hostel":"msanjay1907@gmail.com",
+        "others":"msanjay1907@gmail.com"
+    }
+    const mailto=categoryMap["others"];
+    const {category,complaint,status,complaint_proof}=req.body
+    const mail = {
+        from: "Admin",
+        to: "msanjay1907@gmail.com",
+        subject: `Complaint Reagarding ${category}`,
+        html: `
+            <p>Complaint: ${complaint}</p>
+            <p>Proof:${complaint_proof}</p>
+            <p>Status:${status}</p>
+            <p>You are requested to reply to this mail as soon as possible with latest updates.</p>
+            <p>Disclaimer:Replies are an account of proof and can be recorded for updation purposes.</p>
+            `,
+    };
+        await contactEmail.sendMail(mail, (error) => {
+            if (error) {
+            res.json(error);
+            } else {
+            res.status(201).json({"message":non_hashed_complaint_id})
+            }
+        });
+    }catch(e){
+        console.log(e)
+    }
+
+}
