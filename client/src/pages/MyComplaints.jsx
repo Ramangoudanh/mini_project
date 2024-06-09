@@ -240,7 +240,12 @@ export default function MyComplaints() {
           <Categorical />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-2">
-            {Object.keys(groupedComplaints).map((status, index) => (
+          {Object.keys(groupedComplaints)
+            .sort((a, b) => {
+              const order = ["Complaint Registered", "Pending", "Resolved"];
+              return order.indexOf(a) - order.indexOf(b);
+            })
+            .map((status, index) => (
               <div key={index} className="flex flex-col gap-4">
                 <h2 className="text-lg font-bold">{status}</h2>
                 {groupedComplaints[status].map((complaint, index) => (
@@ -250,12 +255,11 @@ export default function MyComplaints() {
                   >
                     {/* Status Circle */}
                     <span
-                      className={`absolute top-2 right-2 inline-block h-4
-                      w-4 rounded-full ${getStatusColor(complaint.status)}`}
+                      className={`absolute top-2 right-2 inline-block h-4 w-4 rounded-full ${getStatusColor(complaint.status)}`}
                     ></span>
                     
                     {/* Info Icon */}
-                    {  (
+                    {(
                       <button
                         className="absolute bottom-2 right-2 p-1 text-blue-500 hover:text-blue-700"
                         onClick={() => openModal(complaint)}
@@ -263,7 +267,7 @@ export default function MyComplaints() {
                         <FiInfo size={20} />
                       </button>
                     )}
-
+        
                     <p className="text-gray-600 mb-2">
                       Title: {complaint.title || 'No Title'}
                     </p>
@@ -282,7 +286,8 @@ export default function MyComplaints() {
                 ))}
               </div>
             ))}
-          </div>
+        </div>
+        
         )}
       </div>
 
@@ -340,6 +345,9 @@ export default function MyComplaints() {
        </button>
      </div>
      <div className="p-4 space-y-4 md:p-5">
+     <p className="text-base leading-relaxed text-gray-200">
+         Complaint ID: <span>{selectedComplaint.complaint_id}</span>
+       </p>
        <p className="text-base leading-relaxed text-gray-200">
          Email: xxxxx@gmail.com
        </p>
@@ -408,13 +416,32 @@ export default function MyComplaints() {
            >
              Update Status
            </button>
+           <div className="flex flex-wrap items-center space-x-4 mb-4 mt-3">
+           <label htmlFor="status" className="block text-sm font-medium text-gray-200">
+            Select Category
+           </label>
+           <select
+             id="status"
+             value={newStatus}
+             onChange={handleStatusChange}
+             className="border rounded-md py-2 px-3 text-gray-700"
+           >
+             <option value="">Select Category</option>
+             <option value="Billing">Billing</option>
+             <option value="Hostel">Hostel</option>
+             <option value="House Keeping">HouseKeeping</option>
+             <option value="Other">Other</option>
+             <option value="Technical">Technical</option>
+           </select>
            <button
              type="button"
              className="ml-4 text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5"
-             onClick={handleCurStatusUpdate}
+             //onClick={handleCurStatusUpdate}
            >
              Send Email
            </button>
+         </div>
+         
          </div>
        </div>
      )}

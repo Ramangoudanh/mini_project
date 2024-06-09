@@ -113,53 +113,54 @@ export default function EmailForm() {
   return (
     <div>
       {isAdmin ? (
-        <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <Typography variant="h4" gutterBottom style={{ textAlign: 'center', marginBottom: '20px' }}>
-            Analytics
-          </Typography>
-          <Slider ref={sliderRef} {...settings} style={{ width: '90%' }}>
-            <div style={{ cursor: 'pointer', display: 'flex', justifyContent: 'center' }}>
-              <Card variant="outlined" style={{ marginBottom: '20px', width: '100%' }}>
-                <CardContent>
-                  <Typography variant="h6" gutterBottom style={{ textAlign: 'center' }}>
-                    Complaints Pie Chart
-                  </Typography>
-                  <div style={chartStyle}>
-                    <BarChart />
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-            <div style={{ cursor: 'pointer', display: 'flex', justifyContent: 'center' }}>
-              <Card variant="outlined" style={{ width: '100%' }}>
-                <CardContent>
-                  <Typography variant="h6" gutterBottom style={{ textAlign: 'center' }}>
-                    Bar Chart
-                  </Typography>
-                  <div style={chartStyle}>
-                    <ProChart />
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-            <div style={{ cursor: 'pointer', display: 'flex', justifyContent: 'center' }}>
-              <Card variant="outlined" style={{ width: '100%' }}>
-                <CardContent>
-                  <Typography variant="h6" gutterBottom style={{ textAlign: 'center' }}>
-                    My Responsive Pie Chart
-                  </Typography>
-                  <div style={chartStyle}>
-                    <ComplaintsPieChart />
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </Slider>
-          <div style={{ display: 'flex', justifyContent: 'space-between', width: '90%', marginTop: '20px' }}>
-            <Button variant="contained" color="primary" onClick={handlePrev}>Previous</Button>
-            <Button variant="contained" color="primary" onClick={handleNext}>Next</Button>
-          </div>
-        </div>
+         <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+         <Typography variant="h4" gutterBottom style={{ textAlign: 'center', marginBottom: '20px' }}>
+           Analytics
+         </Typography>
+         <Slider ref={sliderRef} {...settings} style={{ width: '90%' }}>
+           <div style={{ cursor: 'pointer', display: 'flex', justifyContent: 'center' }} title="Hover to see the count">
+             <Card variant="outlined" style={{ marginBottom: '20px', width: '100%' }}>
+               <CardContent>
+                 <Typography variant="h6" gutterBottom style={{ textAlign: 'center' }}>
+                   Complaints Pie Chart
+                 </Typography>
+                 <div style={chartStyle}>
+                   <BarChart />
+                 </div>
+               </CardContent>
+             </Card>
+           </div>
+           <div style={{ cursor: 'pointer', display: 'flex', justifyContent: 'center' }} title="Hover to see the count">
+             <Card variant="outlined" style={{ width: '100%' }}>
+               <CardContent>
+                 <Typography variant="h6" gutterBottom style={{ textAlign: 'center' }}>
+                   Bar Chart
+                 </Typography>
+                 <div style={chartStyle}>
+                   <ProChart />
+                 </div>
+               </CardContent>
+             </Card>
+           </div>
+           <div style={{ cursor: 'pointer', display: 'flex', justifyContent: 'center' }} title="Hover to see the count">
+             <Card variant="outlined" style={{ width: '100%' }}>
+               <CardContent>
+                 <Typography variant="h6" gutterBottom style={{ textAlign: 'center' }}>
+                   My Responsive Pie Chart
+                 </Typography>
+                 <div style={chartStyle}>
+                   <ComplaintsPieChart />
+                 </div>
+               </CardContent>
+             </Card>
+           </div>
+         </Slider>
+         <div style={{ display: 'flex', justifyContent: 'space-between', width: '90%', marginTop: '20px' }}>
+           <Button variant="contained" color="primary" onClick={handlePrev}>Previous</Button>
+           <span>hover to see Details</span>
+           <Button variant="contained" color="primary" onClick={handleNext}>Next</Button>
+         </div>
+       </div>
       ) : (
         <div className="max-w-md mt-5 mx-auto bg-blue-100 shadow-md rounded-lg overflow-hidden">
           <div className="p-6">

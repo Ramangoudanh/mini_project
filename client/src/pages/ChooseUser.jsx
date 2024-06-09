@@ -38,7 +38,7 @@ const ChooseUser = () => {
             <StyledPaper elevation={3} onClick={() => handleNavigate('user')}>
               <Box mb={2} display="flex" justifyContent="center" alignItems="center">
                 {/* Centered user logo */}
-                <div style={{ backgroundImage: 'url("https://tse1.mm.bing.net/th?id=OIP.f3DM2upCo-p_NPRwBAwbKQHaHa&pid=Api&rs=1&c=1&qlt=95&w=121&h=121")', width: '80px', height: '80px', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+                <div style={{ backgroundImage: 'url("https://www.iconpacks.net/icons/1/free-user-group-icon-296-thumb.png")', width: '80px', height: '80px', backgroundSize: 'cover', backgroundPosition: 'center' }} />
               </Box>
               <StyledTypography>User</StyledTypography>
               Login as a user to explore the Anonymous complaining system of the College.
