@@ -65,7 +65,11 @@ export default function MyComplaints() {
         },
         body: JSON.stringify({
           _id: selectedComplaint._id,
+          complaint_id:selectedComplaint.complaint_id,
           curStatus: newCurStatus,
+          status:newStatus,
+          statusProof:link,
+          complaint:selectedComplaint.title
         }),
       });
   
@@ -81,6 +85,34 @@ export default function MyComplaints() {
       console.error('Error updating status:', error);
     }
   };
+
+  const sendEmailToOther=async()=>{
+    try {
+      const response = await fetch('http://localhost:3000/api/complaint/sendEmailToCategoryHead', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          category,
+          complaint:selectedComplaint.complaint,
+          status:selectedComplaint.curStatus,
+          complaint_proof:selectedComplaint.complaint_proof
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to update status');
+      }
+  
+      const updatedComplaint = await response.json();
+      // Update the UI or state with the updated complaint if needed
+      console.log('Complaint updated successfully:', updatedComplaint);
+      closeModal();
+    } catch (error) {
+      console.error('Error updating status:', error);
+    }
+  }
   
   
   useEffect(() => {
@@ -96,7 +128,7 @@ export default function MyComplaints() {
 
       try {
         let response;
-
+        //console.log(isAdmin);
         if (isAdmin) {
       
           console.log(category, status);
@@ -118,7 +150,7 @@ export default function MyComplaints() {
             },
             body: JSON.stringify({ uuid: currentUser.uuid }),
           });
-          console.log(response);
+          //console.log(response);
         }
 
         if (!response.ok) {
@@ -148,7 +180,7 @@ export default function MyComplaints() {
     };
 
     fetchData();
-  }, [currentUser, category, isAdmin]);
+  }, [currentUser, category, isAdmin,complaintList]);
 
   const openModal = (complaint) => {
     setSelectedComplaint(complaint);
@@ -349,7 +381,7 @@ export default function MyComplaints() {
          Complaint ID: <span>{selectedComplaint.complaint_id}</span>
        </p>
        <p className="text-base leading-relaxed text-gray-200">
-         Email: xxxxx@gmail.com
+         Email: xxxxx@somedomain.com
        </p>
        <p className="text-base leading-relaxed text-gray-200">
          {selectedComplaint.complaint}
@@ -436,7 +468,7 @@ export default function MyComplaints() {
            <button
              type="button"
              className="ml-4 text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5"
-             //onClick={handleCurStatusUpdate}
+             onClick={sendEmailToOther}
            >
              Send Email
            </button>

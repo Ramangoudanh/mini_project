@@ -30,6 +30,11 @@ const ComplaintSchema = new mongoose.Schema({
     required: true,
     default: "Complaint Registered",
   },
+  statusProof:{
+    type:String,
+    required:true,
+    default:"www.google.com"
+  },
   curStatus: {
     type: String,
     required: true,
